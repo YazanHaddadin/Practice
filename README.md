@@ -1,2 +1,2 @@
-# Coding
-Learning new coding techniques.
+# Union Find
+Learning about Union Find.
