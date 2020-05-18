@@ -1,5 +1,3 @@
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Percolation {
 
     public static Percolation ins;
@@ -13,7 +11,8 @@ public class Percolation {
 
     public Percolation (int n) {
 
-        if(n < 0){
+        if(n < 1){
+            System.out.println("N cannot be less than 1");
             return;
         }
 
@@ -39,9 +38,6 @@ public class Percolation {
                 id[i][j] = temp++;
             }
         }
-
-        pHelper.printArr(grid);
-        pHelper.printArr(id);
     }
 
     public void open(int row, int col){
@@ -104,7 +100,7 @@ public class Percolation {
         return false;
     }
 
-    public static void main(String[] args) {
+    /**public static void main(String[] args) {
 
         int N = Integer.parseInt(args[0]);
 
@@ -127,5 +123,5 @@ public class Percolation {
         per.pHelper.printArr(per.grid);
         per.pHelper.printArr(per.id);
         System.out.println(per.numberOfOpenSites());
-    }
+    }**/
 }
