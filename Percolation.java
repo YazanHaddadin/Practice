@@ -2,15 +2,29 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Percolation {
 
+    public static Percolation ins;
+
+    PercolationHelper pHelper;
+
     int[][] grid;
     int[][] id;
     int size;
+    int max;
 
     public Percolation (int n) {
+
+        if(n < 0){
+            return;
+        }
+
+        ins = this;
         size = n;
+        max = (size*size)-1;
+
+        pHelper = new PercolationHelper(size, max);
 
         grid = new int[n][n];
-        id = new int[n+1][n+1];
+        id = new int[n][n];
 
         for (int i=0; i<n; i++){
             for (int j=0; j<n; j++){
@@ -26,130 +40,92 @@ public class Percolation {
             }
         }
 
-        printArr();
+        pHelper.printArr(grid);
+        pHelper.printArr(id);
     }
 
-    public void openSite(int row, int col){
-        if(grid[row][col] == 0){
-            grid[row][col] = 1;
-            printArr();
-        }
+    public void open(int row, int col){
+
+        try{
+            if(!isOpen(row, col)){
+                if(row == 0){
+                    pHelper.unify(id, new int[] {0,0}, new int[] {row, col});
+                }
+                else if(row == size-1){
+                    pHelper.unify(id, new int[] {size-1, size-1}, new int[] {row,col});
+                }
+
+                grid[row][col] = 1;
+
+                pHelper.unifyAdjacent(id, row, col);
+            }
+        } catch (IllegalArgumentException e){System.out.println("Out of Bounds");}
     }
 
-    public int find(int row, int col){
-        int root = (size*row) + col;
-        int r = (root-col)/size;
-        int c = root-(size*row);
-
-        while (root != id[r][c]){ 
-            root = id[r][c];
-            r = (root - c)/size;
-            c = root - (size*r);
+    public boolean isOpen(int row, int col){
+        try{
+            if(grid[row][col] == 1)
+                return true;
+        } catch (IllegalArgumentException e){
+            System.out.println("Out of Bounds");
         }
 
-        return root;
+        return false;
     }
 
-    public boolean connected(int[] rc1, int[] rc2){
-        int row1 = rc1[0];
-        int col1 = rc1[1];
-        int row2 = rc2[0];
-        int col2 = rc2[1];
+    public boolean isFull(int row, int col){
+        try{
+            if(id[row][col] == 0)
+                return true;
+        } catch (IllegalArgumentException e){
+            System.out.println("Out of Bounds");
+        }
 
-        return find(row1, col1) == find(row2, col2);
+        return false;
     }
 
-    public void unify(int[] rc1, int[] rc2){
-        if(connected(rc1, rc2)) return;
+    public int numberOfOpenSites(){
+        int res = 0;
 
-        int row1 = rc1[0];
-        int col1 = rc1[1];
-        int row2 = rc2[0];
-        int col2 = rc2[1];
-
-        int root1 = find(row1,col1);
-        int root2 = find(row2,col2);
-
-        if(root1 == 0){
-            id[row2][col2] = 0;
-            for (int i=0; i<size; i++){
-                for (int j=0; j<size; j++){
-                    if(id[i][j] == root2) id[i][j] = 0;
-                }
-            }
-        }
-        else if(root2 == 0){
-            id[row1][col1] = 0;
-            for (int i=0; i<size; i++){
-                for (int j=0; j<size; j++){
-                    if(id[i][j] == root1) id[i][j] = 0;
-                }
-            }
-        } 
-        else if(root1 == 24){
-            id[row1][col1] = 24;
-            for (int i=0; i<size; i++){
-                for (int j=0; j<size; j++){
-                    if(id[i][j] == root1) id[i][j] = 24;
-                }
-            }
-        }
-        else if(root2 == 24){
-            id[row1][col1] = 24;
-            for (int i=0; i<size; i++){
-                for (int j=0; j<size; j++){
-                    if(id[i][j] == root1) id[i][j] = 24;
-                }
-            }
-        }
-        else{
-            id[row2][col2] = root1;
-            for (int i=0; i<size; i++){
-                for (int j=0; j<size; j++){
-                    if(id[i][j] == root2) id[i][j] = root1;
-                }
+        for (int i = 0; i<size; i++){
+            for (int j = 0; j<size; j++){
+                if(grid[i][j] == 1) res++;
             }
         }
 
-        System.out.println(" ");
-        printArr();
+        return res;
     }
 
-    public void printArr(){
+    public boolean percolates(){
         for (int i=0; i<size; i++){
-            for (int j=0; j<size; j++){
-                System.out.print(id[i][j] + " ");
-            }
-            System.out.println("");
+            if(id[size-1][i] == 0) return true;
         }
-        System.out.println("");
+
+        return false;
     }
 
     public static void main(String[] args) {
 
-        int N = 5;
+        int N = Integer.parseInt(args[0]);
 
-        //UnionFind uf = new UnionFind(10);
+        if(N<0) {
+            System.out.println("N cannot be less than 0");
+            return;
+        }
 
         Percolation per = new Percolation(N);
 
-        int[] base = new int[] {0,1};
+        boolean p = false;
 
-        int[] t = new int[] {0,2};
-        int[] t1 = new int[] {1,2};
-
-        per.unify(base, t1);
-        per.unify(t, t1);
-
-        per.unify(new int[]{4,2}, new int[] {3,0});
-        per.unify(new int[]{4,2}, new int[] {3,2});
-        per.unify(new int[]{0,1}, new int[]{3,0});
-      
-
-        /**for (int i=0; i<5; i++){
+        while (p == false){
             int r1 = ThreadLocalRandom.current().nextInt(0, N);
             int r2 = ThreadLocalRandom.current().nextInt(0, N);
-            per.openSite(r1, r2);
-        }**/
+            per.open(r1, r2);
+            p = per.percolates();
+        }
+
+        per.pHelper.printArr(per.grid);
+        per.pHelper.printArr(per.id);
+        System.out.println(per.numberOfOpenSites());
     }
 }
