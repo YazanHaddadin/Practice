@@ -14,4 +14,7 @@ class TestC(unittest.TestCase):
         with self.assertRaises(TypeError):
             res = self.summ(data, "SO")
 
+if __name__ == "__main__":
+    unittest.main()
+
  
