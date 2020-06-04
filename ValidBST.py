@@ -26,7 +26,7 @@ def printTree(root):
 
     
 
-H = Node(5)
+"""H = Node(5)
 H.left = Node(2)
 H.left.left = Node(1)
 H.left.right = Node(3)
@@ -36,6 +36,6 @@ H.right.right = Node(8)
 
 printTree(H)
 print(ValidBST(H))
-        
+        """
 
     

@@ -1,3 +1,6 @@
+import unittest
+from ValidBST import ValidBST
+
 class Node:
 
     def __init__(self, value):
@@ -29,11 +32,18 @@ class Node:
         if(self.right):
             self.right.printTree()
 
-root = Node(5)
-root.insert(10)
-root.insert(4)
-root.insert(7)
-root.insert(7)
-root.printTree()
+class TestTree(unittest.TestCase):
+    testT = Node(5)
+    testT.insert(3)
+    testT.insert(6)
+    testT.insert(10)
+    testT.insert(-1)
 
-#https://www.bigocheatsheet.com/
+    def test_insert(self):
+        self.assertTrue(ValidBST(self.testT), "NO")
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
