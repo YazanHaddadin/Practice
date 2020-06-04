@@ -61,11 +61,11 @@ class SLinkedList:
 
         HeadVal = None
 
-llist = SLinkedList()
+"""llist = SLinkedList()
 llist.AtBeg("Mon")
 llist.AtBeg("Tue")
 llist.AtBeg("Wed")
 llist.AtBeg("Thu")
 llist.AtEnd("Sat")
 llist.RemoveNode("Tue")
-llist.listprint()
+llist.listprint()"""
