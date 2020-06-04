@@ -1,2 +1,2 @@
-# Union Find
-Learning about Union Find.
+# Practice
+Learning about programming.
