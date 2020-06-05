@@ -5,10 +5,10 @@ class Node:
 
 class SLinkedList:
     def __init__(self):
-        self.headval = None
+        self.head = None
 
     def listprint(self):
-        printval = self.headval
+        printval = self.head
         while printval is not None:
             print (printval.data)
             printval = printval.next
@@ -16,15 +16,15 @@ class SLinkedList:
     def AtBeg(self,newdata):
         NewNode = Node(newdata)
 
-        NewNode.next = self.headval
-        self.headval = NewNode
+        NewNode.next = self.head
+        self.head = NewNode
 
     def AtEnd(self, newdata):
         NewNode = Node(newdata)
-        if self.headval is None:
-            self.headval = NewNode
+        if self.head is None:
+            self.head = NewNode
             return
-        laste = self.headval
+        laste = self.head
         while(laste.next):
             laste = laste.next
         laste.next=NewNode
@@ -40,11 +40,11 @@ class SLinkedList:
 
     def RemoveNode(self, Removekey):
 
-        HeadVal = self.headval
+        HeadVal = self.head
 
         if (HeadVal is not None):
             if (HeadVal.data == Removekey):
-                self.headval = HeadVal.next
+                self.head = HeadVal.next
                 HeadVal = None
                 return
 
